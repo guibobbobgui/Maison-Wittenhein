@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Villa en Location — Séjour d'Exception</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand: #f5efe6;
+      --clay: #c9a882;
+      --terracotta: #b0724a;
+      --deep: #2a1f15;
+      --stone: #8c7b6b;
+      --white: #fdfaf6;
+      --green: #4a6741;
+      --water: #5b8fa8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--deep);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: rgba(253,250,246,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,130,0.25);
+      transition: padding .4s;
+    }
+    nav.scrolled { padding: .9rem 4rem; }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300; letter-spacing: .12em;
+      color: var(--deep); text-decoration: none;
+    }
+    .nav-logo span { color: var(--terracotta); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--stone);
+      font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;
+      transition: color .3s;
+    }
+    .nav-links a:hover { color: var(--terracotta); }
+    .nav-cta {
+      background: var(--terracotta); color: var(--white);
+      border: none; padding: .65rem 1.8rem;
+      font-family: 'Jost', sans-serif; font-size: .78rem;
+      letter-spacing: .16em; text-transform: uppercase; cursor: pointer;
+      transition: background .3s;
+    }
+    .nav-cta:hover { background: var(--deep); }
+
+    /* ── HERO ── */
+    .hero {
+      height: 100vh; position: relative;
+      display: flex; align-items: flex-end; padding-bottom: 8vh;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #e8d9c5 0%, #c5b49a 40%, #a08060 100%);
+      z-index: 0;
+    }
+    /* Decorative texture */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 70% 30%, rgba(91,143,168,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(74,103,65,0.12) 0%, transparent 60%);
+    }
+    /* Photo placeholder grid in hero */
+    .hero-photo-grid {
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      display: grid; grid-template-columns: 200px 140px;
+      grid-template-rows: 160px 100px 120px;
+      gap: 10px; z-index: 1;
+      opacity: .88;
+    }
+    .hero-photo-grid .ph {
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.5);
+      font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .hero-photo-grid .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-photo-grid .ph:nth-child(1) { grid-row: 1 / span 2; }
+    .hero-photo-grid .ph:nth-child(3) { grid-row: 2 / span 2; }
+
+    .hero-content {
+      position: relative; z-index: 2; padding-left: 8vw; max-width: 640px;
+      animation: heroIn .9s ease both;
+    }
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-eyebrow {
+      font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 6vw, 5.2rem); font-weight: 300; line-height: 1.05;
+      color: var(--deep); margin-bottom: 1.6rem;
+    }
+    .hero-title em { font-style: italic; color: var(--terracotta); }
+    .hero-sub {
+      font-size: .95rem; color: var(--stone); line-height: 1.7;
+      margin-bottom: 2.4rem; max-width: 480px;
+    }
+    .hero-btns { display: flex; gap: 1rem; }
+    .btn-primary {
+      background: var(--terracotta); color: var(--white);
+      border: none; padding: .9rem 2.4rem;
+      font-family: 'Jost', sans-serif; font-size: .8rem;
+      letter-spacing: .15em; text-transform: uppercase; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: background .3s, transform .2s;
+    }
+    .btn-primary:hover { background: var(--deep); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: var(--deep);
+      border: 1.5px solid var(--clay); padding: .9rem 2.4rem;
+      font-family: 'Jost', sans-serif; font-size: .8rem;
+      letter-spacing: .15em; text-transform: uppercase; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: border-color .3s, color .3s;
+    }
+    .btn-ghost:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .hero-scroll {
+      position: absolute; bottom: 3vh; left: 50%; transform: translateX(-50%);
+      z-index: 2; display: flex; flex-direction: column; align-items: center;
+      gap: .5rem; color: var(--stone); font-size: .65rem; letter-spacing: .2em;
+      text-transform: uppercase; animation: bounce 2s infinite;
+    }
+    .hero-scroll::after {
+      content: ''; width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--clay), transparent);
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 7rem 8vw; }
+    .section-label {
+      font-size: .7rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--clay); margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.15;
+      color: var(--deep); margin-bottom: 1.8rem;
+    }
+    .section-title em { font-style: italic; color: var(--terracotta); }
+
+    /* ── GALLERY ── */
+    #galerie { background: var(--sand); }
+    .gallery-intro { max-width: 520px; margin-bottom: 3.5rem; }
+    .gallery-intro p { color: var(--stone); line-height: 1.75; font-size: .95rem; }
+
+    /* Instructions for adding photos */
+    .gallery-add-tip {
+      background: rgba(201,168,130,0.15);
+      border-left: 3px solid var(--clay);
+      padding: 1rem 1.4rem; margin-bottom: 2.5rem;
+      font-size: .82rem; color: var(--stone); line-height: 1.6;
+      border-radius: 0 4px 4px 0;
+    }
+    .gallery-add-tip strong { color: var(--terracotta); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 200px;
+      gap: 10px;
+    }
+    .gallery-item {
+      overflow: hidden; border-radius: 2px; cursor: pointer; position: relative;
+      background: #e0d0be;
+      transition: transform .35s, box-shadow .35s;
+    }
+    .gallery-item:hover { transform: scale(1.015); box-shadow: 0 12px 40px rgba(42,31,21,.18); z-index: 2; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-item .ph-label {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--stone); font-size: .75rem; letter-spacing: .12em;
+      text-transform: uppercase; gap: .5rem;
+    }
+    .gallery-item .ph-label svg { width: 28px; height: 28px; opacity: .45; }
+    /* Layout spans */
+    .gallery-item:nth-child(1) { grid-column: span 5; grid-row: span 2; }
+    .gallery-item:nth-child(2) { grid-column: span 4; grid-row: span 2; }
+    .gallery-item:nth-child(3) { grid-column: span 3; }
+    .gallery-item:nth-child(4) { grid-column: span 3; }
+    .gallery-item:nth-child(5) { grid-column: span 4; grid-row: span 2; }
+    .gallery-item:nth-child(6) { grid-column: span 4; }
+    .gallery-item:nth-child(7) { grid-column: span 4; }
+    .gallery-item:nth-child(8) { grid-column: span 4; grid-row: span 2; }
+    .gallery-item:nth-child(9) { grid-column: span 4; }
+    .gallery-item:nth-child(10){ grid-column: span 4; }
+
+    /* lightbox */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(42,31,21,.93); align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 2px; }
+    .lightbox-close {
+      position: absolute; top: 2rem; right: 2.5rem;
+      color: var(--sand); font-size: 2rem; cursor: pointer; line-height: 1;
+      background: none; border: none; font-family: inherit;
+    }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      color: var(--white); width: 50px; height: 50px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.4rem; transition: background .3s;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,.2); }
+    .lightbox-prev { left: 2rem; }
+    .lightbox-next { right: 2rem; }
+
+    /* ── FEATURES ── */
+    #caracteristiques {
+      background: var(--white);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+    }
+    .features-text .section-title { margin-bottom: 1rem; }
+    .features-text p { color: var(--stone); line-height: 1.8; margin-bottom: 2rem; font-size: .95rem; }
+    .features-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+      margin-top: 2.5rem;
+    }
+    .feature-card {
+      padding: 1.4rem; background: var(--sand);
+      border-radius: 2px; border-top: 2px solid var(--clay);
+      transition: border-color .3s, transform .25s;
+    }
+    .feature-card:hover { border-color: var(--terracotta); transform: translateY(-3px); }
+    .feature-icon { font-size: 1.4rem; margin-bottom: .6rem; }
+    .feature-name { font-size: .85rem; font-weight: 500; color: var(--deep); margin-bottom: .3rem; }
+    .feature-desc { font-size: .78rem; color: var(--stone); line-height: 1.5; }
+
+    .features-visual {
+      position: relative; height: 560px;
+    }
+    .fv-main {
+      width: 75%; height: 80%; object-fit: cover;
+      border-radius: 2px; position: absolute; right: 0; top: 0;
+      background: #d4c4ae;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--stone); font-size: .75rem; letter-spacing: .1em;
+    }
+    .fv-main img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+    .fv-accent {
+      width: 50%; height: 42%; object-fit: cover;
+      border-radius: 2px; position: absolute; left: 0; bottom: 0;
+      background: #bfad97; border: 5px solid var(--white);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--stone); font-size: .75rem; letter-spacing: .1em;
+    }
+    .fv-accent img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+    .fv-badge {
+      position: absolute; right: -1rem; bottom: 30%;
+      background: var(--terracotta); color: var(--white);
+      padding: 1rem 1.3rem; text-align: center; border-radius: 2px;
+      box-shadow: 0 8px 30px rgba(176,114,74,.35);
+    }
+    .fv-badge-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; font-weight: 300; line-height: 1;
+    }
+    .fv-badge-text { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; opacity: .85; }
+
+    /* ── TARIFS ── */
+    #tarifs { background: var(--deep); }
+    #tarifs .section-title { color: var(--sand); }
+    #tarifs .section-title em { color: var(--clay); }
+    #tarifs .section-label { color: var(--clay); }
+    .tarifs-intro { color: var(--stone); font-size: .95rem; line-height: 1.75; margin-bottom: 3.5rem; max-width: 560px; }
+    .tarifs-cards { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .tarif-card {
+      flex: 1; min-width: 240px; max-width: 340px;
+      border: 1.5px solid rgba(201,168,130,.2);
+      padding: 2.5rem; border-radius: 2px;
+      transition: border-color .3s, transform .3s;
+      position: relative; overflow: hidden;
+    }
+    .tarif-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--clay); transform: scaleX(0); transform-origin: left;
+      transition: transform .4s;
+    }
+    .tarif-card:hover { border-color: var(--clay); transform: translateY(-4px); }
+    .tarif-card:hover::before { transform: scaleX(1); }
+    .tarif-card.featured { border-color: var(--terracotta); }
+    .tarif-card.featured::before { transform: scaleX(1); background: var(--terracotta); }
+    .tarif-badge {
+      display: inline-block; background: var(--terracotta); color: var(--white);
+      font-size: .65rem; letter-spacing: .15em; text-transform: uppercase;
+      padding: .3rem .8rem; margin-bottom: 1.5rem; border-radius: 1px;
+    }
+    .tarif-duration {
+      font-size: .75rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--clay); margin-bottom: .8rem;
+    }
+    .tarif-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.4rem; font-weight: 300; color: var(--sand); line-height: 1;
+      margin-bottom: .4rem;
+    }
+    .tarif-price sup { font-size: 1.4rem; vertical-align: super; }
+    .tarif-per { font-size: .75rem; color: var(--stone); margin-bottom: 1.8rem; }
+    .tarif-features { list-style: none; }
+    .tarif-features li {
+      font-size: .82rem; color: var(--stone); padding: .55rem 0;
+      border-bottom: 1px solid rgba(201,168,130,.1);
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .tarif-features li::before { content: '✓'; color: var(--clay); font-size: .8rem; }
+    .tarif-cta {
+      margin-top: 2rem; width: 100%;
+      background: transparent; border: 1.5px solid var(--clay);
+      color: var(--sand); padding: .85rem;
+      font-family: 'Jost', sans-serif; font-size: .78rem;
+      letter-spacing: .15em; text-transform: uppercase; cursor: pointer;
+      transition: background .3s, color .3s;
+    }
+    .tarif-cta:hover { background: var(--clay); color: var(--white); }
+    .tarif-card.featured .tarif-cta {
+      background: var(--terracotta); border-color: var(--terracotta); color: var(--white);
+    }
+    .tarif-card.featured .tarif-cta:hover { background: var(--clay); border-color: var(--clay); }
+
+    /* Extras */
+    .tarifs-note {
+      margin-top: 2.5rem; color: var(--stone); font-size: .82rem; line-height: 1.7;
+      border-top: 1px solid rgba(201,168,130,.15); padding-top: 1.8rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--sand); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-info p { color: var(--stone); line-height: 1.8; font-size: .95rem; margin-bottom: 1.5rem; }
+    .contact-details { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+    .contact-detail { display: flex; align-items: flex-start; gap: 1rem; }
+    .contact-detail-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--terracotta); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .contact-detail-text { font-size: .88rem; color: var(--stone); line-height: 1.6; }
+    .contact-detail-text strong { display: block; color: var(--deep); font-weight: 500; margin-bottom: .2rem; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--stone); }
+    .form-group input, .form-group textarea, .form-group select {
+      background: var(--white); border: 1.5px solid rgba(201,168,130,.4);
+      padding: .85rem 1rem; font-family: 'Jost', sans-serif;
+      font-size: .9rem; color: var(--deep);
+      border-radius: 2px; transition: border-color .3s;
+      outline: none; width: 100%;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--terracotta);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-submit {
+      background: var(--terracotta); color: var(--white); border: none;
+      padding: 1rem 2rem; font-family: 'Jost', sans-serif;
+      font-size: .8rem; letter-spacing: .15em; text-transform: uppercase;
+      cursor: pointer; transition: background .3s; align-self: flex-start;
+    }
+    .form-submit:hover { background: var(--deep); }
+    .form-success {
+      display: none; background: rgba(74,103,65,.12); border-left: 3px solid var(--green);
+      padding: 1rem 1.4rem; font-size: .88rem; color: var(--green); border-radius: 0 4px 4px 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep); color: var(--stone);
+      padding: 3rem 8vw; display: flex;
+      align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+      font-size: .8rem;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 300; color: var(--sand);
+    }
+    .footer-logo span { color: var(--clay); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { color: var(--stone); text-decoration: none; transition: color .3s; font-size: .75rem; letter-spacing: .1em; }
+    .footer-links a:hover { color: var(--clay); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      nav.scrolled { padding: .75rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4.5rem 6vw; }
+      #caracteristiques { grid-template-columns: 1fr; gap: 2.5rem; }
+      .features-visual { height: 320px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-photo-grid { display: none; }
+      .hero-content { max-width: 100%; padding: 0 6vw; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
+      .gallery-item { grid-column: span 1 !important; grid-row: span 1 !important; }
+      .tarifs-cards { flex-direction: column; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Villa <span>&</span> Jardin</a>
+  <ul class="nav-links">
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#caracteristiques">La Maison</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Réserver</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-photo-grid">
+    <div class="ph" id="hero-ph1">
+      <img id="hero-img1" src="" alt="" style="display:none" />
+      <span id="hero-lbl1">Photo façade</span>
+    </div>
+    <div class="ph" id="hero-ph2">
+      <img id="hero-img2" src="" alt="" style="display:none" />
+      <span id="hero-lbl2">Piscine</span>
+    </div>
+    <div class="ph" id="hero-ph3">
+      <img id="hero-img3" src="" alt="" style="display:none" />
+      <span id="hero-lbl3">Jardin</span>
+    </div>
+    <div class="ph" id="hero-ph4">
+      <img id="hero-img4" src="" alt="" style="display:none" />
+      <span id="hero-lbl4">Salon</span>
+    </div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Location de vacances · Sud de la France</p>
+    <h1 class="hero-title">Une villa d'exception<br/>pour vos <em>moments</em><br/>inoubliables</h1>
+    <p class="hero-sub">130 m² de confort et d'élégance, un jardin paysager, une piscine privée — tout ce qu'il faut pour un séjour parfait.</p>
+    <div class="hero-btns">
+      <a href="#galerie" class="btn-primary">Voir la galerie</a>
+      <a href="#tarifs" class="btn-ghost">Consulter les tarifs</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Découvrir</div>
+</section>
+
+<!-- GALLERY -->
+<section id="galerie">
+  <div class="gallery-intro reveal">
+    <p class="section-label">Galerie photos</p>
+    <h2 class="section-title">Chaque espace,<br/><em>soigneusement</em> pensé</h2>
+    <p>Parcourez les espaces de la villa et imaginez vos vacances dans ce cadre de rêve.</p>
+  </div>
+
+  <!-- GUIDE D'AJOUT DE PHOTOS -->
+  <div class="gallery-add-tip reveal">
+    <strong>📷 Comment ajouter vos photos :</strong> Remplacez les chemins d'images dans le code HTML.
+    Cherchez <code>data-src="votre-photo.jpg"</code> dans chaque <code>&lt;div class="gallery-item"&gt;</code>
+    et remplacez par le chemin de votre photo (ex : <code>photos/salon.jpg</code>).
+    Placez vos images dans un dossier <strong>photos/</strong> à la racine du projet.
+  </div>
+
+  <div class="gallery-grid reveal">
+    <!-- Item 1 – Grande image principale -->
+    <div class="gallery-item" data-src="photos/facade.jpg" onclick="openLightbox(0)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Façade / Extérieur
+      </div>
+    </div>
+    <!-- Item 2 -->
+    <div class="gallery-item" data-src="photos/piscine.jpg" onclick="openLightbox(1)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Piscine
+      </div>
+    </div>
+    <!-- Item 3 -->
+    <div class="gallery-item" data-src="photos/jardin.jpg" onclick="openLightbox(2)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Jardin paysager
+      </div>
+    </div>
+    <!-- Item 4 -->
+    <div class="gallery-item" data-src="photos/salon.jpg" onclick="openLightbox(3)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Salon
+      </div>
+    </div>
+    <!-- Item 5 -->
+    <div class="gallery-item" data-src="photos/salle-a-manger.jpg" onclick="openLightbox(4)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Salle à manger
+      </div>
+    </div>
+    <!-- Item 6 -->
+    <div class="gallery-item" data-src="photos/cuisine.jpg" onclick="openLightbox(5)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Cuisine
+      </div>
+    </div>
+    <!-- Item 7 -->
+    <div class="gallery-item" data-src="photos/chambre1.jpg" onclick="openLightbox(6)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Chambre 1
+      </div>
+    </div>
+    <!-- Item 8 -->
+    <div class="gallery-item" data-src="photos/chambre2.jpg" onclick="openLightbox(7)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Chambre 2
+      </div>
+    </div>
+    <!-- Item 9 -->
+    <div class="gallery-item" data-src="photos/salle-de-bain.jpg" onclick="openLightbox(8)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Salle de bain
+      </div>
+    </div>
+    <!-- Item 10 -->
+    <div class="gallery-item" data-src="photos/terrasse.jpg" onclick="openLightbox(9)">
+      <div class="ph-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Terrasse
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">‹</button>
+  <img id="lightbox-img" src="" alt="" />
+  <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">›</button>
+</div>
+
+<!-- CARACTERISTIQUES -->
+<section id="caracteristiques">
+  <div class="features-text reveal">
+    <p class="section-label">La maison</p>
+    <h2 class="section-title">Confort et <em>élégance</em><br/>au cœur de l'été</h2>
+    <p>Une villa de 130 m² entièrement équipée, pensée pour accueillir familles et groupes d'amis dans les meilleures conditions. Son jardin paysager et sa piscine en font un véritable havre de paix.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🛏</div>
+        <div class="feature-name">4 chambres</div>
+        <div class="feature-desc">Capacité jusqu'à 8 personnes, couchages confortables</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏊</div>
+        <div class="feature-name">Piscine privée</div>
+        <div class="feature-desc">Petite piscine avec jardin paysager arboré</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛁</div>
+        <div class="feature-name">Salle de bain + 2 WC</div>
+        <div class="feature-desc">Salle de bain complète et deux toilettes séparés</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🍽</div>
+        <div class="feature-name">Cuisine équipée</div>
+        <div class="feature-desc">Cuisine moderne entièrement aménagée et équipée</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛋</div>
+        <div class="feature-name">Salon & séjour</div>
+        <div class="feature-desc">Grands espaces de vie lumineux et confortables</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌿</div>
+        <div class="feature-name">Jardin paysager</div>
+        <div class="feature-desc">130 m², espaces verts soignés et terrasse ombragée</div>
+      </div>
+    </div>
+  </div>
+  <div class="features-visual reveal">
+    <!-- Remplacez les src par vos chemins de photos -->
+    <div class="fv-main">
+      <img src="photos/facade.jpg" alt="Façade de la villa" onerror="this.style.display='none'" />
+    </div>
+    <div class="fv-accent">
+      <img src="photos/piscine.jpg" alt="Piscine" onerror="this.style.display='none'" />
+    </div>
+    <div class="fv-badge">
+      <div class="fv-badge-num">130</div>
+      <div class="fv-badge-text">m² de surface</div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section id="tarifs">
+  <p class="section-label reveal">Tarifs</p>
+  <h2 class="section-title reveal">Séjours sur <em>mesure</em></h2>
+  <p class="tarifs-intro reveal">Des tarifs transparents, tout inclus. Pas de mauvaise surprise au moment du règlement.</p>
+  <div class="tarifs-cards reveal">
+    <div class="tarif-card">
+      <div class="tarif-duration">Court séjour</div>
+      <div class="tarif-price"><sup>€</sup>1 400</div>
+      <div class="tarif-per">par semaine · 7 nuits</div>
+      <ul class="tarif-features">
+        <li>Villa complète 130 m²</li>
+        <li>4 chambres jusqu'à 8 personnes</li>
+        <li>Piscine privée & jardin</li>
+        <li>Cuisine entièrement équipée</li>
+        <li>Linge de maison fourni</li>
+      </ul>
+      <button class="tarif-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Demander ce séjour</button>
+    </div>
+    <div class="tarif-card featured">
+      <div class="tarif-badge">Meilleur tarif</div>
+      <div class="tarif-duration">Séjour prolongé</div>
+      <div class="tarif-price"><sup>€</sup>2 500</div>
+      <div class="tarif-per">pour 2 semaines · 14 nuits</div>
+      <ul class="tarif-features">
+        <li>Villa complète 130 m²</li>
+        <li>4 chambres jusqu'à 8 personnes</li>
+        <li>Piscine privée & jardin</li>
+        <li>Cuisine entièrement équipée</li>
+        <li>Linge de maison fourni</li>
+        <li><strong style="color:var(--clay)">Économie de 300 € vs 2 semaines</strong></li>
+      </ul>
+      <button class="tarif-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Réserver 2 semaines</button>
+    </div>
+  </div>
+  <p class="tarifs-note reveal">
+    * Les tarifs s'entendent toutes charges comprises. Un acompte de 30% est demandé à la réservation, le solde est dû 30 jours avant l'arrivée. Une caution remboursable est demandée à l'arrivée. Le ménage de fin de séjour est inclus.
+  </p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <p class="section-label">Contact & réservation</p>
+      <h2 class="section-title">Réservez votre<br/><em>séjour</em> dès aujourd'hui</h2>
+      <p>Pour vérifier les disponibilités ou obtenir plus d'informations, contactez-nous directement. Nous répondons dans les 24h.</p>
+      <div class="contact-details">
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📞</div>
+          <div class="contact-detail-text">
+            <strong>Téléphone</strong>
+            <!-- Remplacez par votre numéro -->
+            +33 6 XX XX XX XX
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">✉️</div>
+          <div class="contact-detail-text">
+            <strong>Email</strong>
+            <!-- Remplacez par votre email -->
+            votre@email.fr
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div class="contact-detail-text">
+            <strong>Localisation</strong>
+            <!-- Remplacez par votre ville / région -->
+            Sud de la France
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom & Nom</label>
+            <input type="text" placeholder="Jean Dupont" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="jean@exemple.fr" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date d'arrivée</label>
+            <input type="date" required />
+          </div>
+          <div class="form-group">
+            <label>Date de départ</label>
+            <input type="date" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Durée souhaitée</label>
+          <select>
+            <option>1 semaine (1 400 €)</option>
+            <option>2 semaines (2 500 €)</option>
+            <option>Autre durée</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nombre de personnes</label>
+          <input type="number" min="1" max="8" placeholder="ex : 4" />
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Questions, informations complémentaires…"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Envoyer la demande</button>
+        <div class="form-success" id="form-success">
+          ✓ Votre message a bien été envoyé ! Nous vous répondons dans les 24h.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Villa <span>&</span> Jardin</div>
+  <div class="footer-links">
+    <a href="#galerie">Galerie</a>
+    <a href="#caracteristiques">La maison</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div style="font-size:.72rem; letter-spacing:.08em;">© 2025 — Location saisonnière</div>
+</footer>
+
+<script>
+  // ── NAV SCROLL ──
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: .12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── GALLERY LOAD IMAGES ──
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const src = item.getAttribute('data-src');
+    if (src) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:none';
+      img.onload = () => {
+        img.style.display = 'block';
+        const label = item.querySelector('.ph-label');
+        if (label) label.style.display = 'none';
+      };
+      item.insertBefore(img, item.firstChild);
+    }
+  });
+
+  // ── LIGHTBOX ──
+  const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+  let currentIdx = 0;
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    const src = galleryItems[idx].getAttribute('data-src');
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeLightboxOutside(e) { if (e.target === document.getElementById('lightbox')) closeLightbox(); }
+  function navLightbox(dir) {
+    currentIdx = (currentIdx + dir + galleryItems.length) % galleryItems.length;
+    document.getElementById('lightbox-img').src = galleryItems[currentIdx].getAttribute('data-src');
+  }
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('lightbox').classList.contains('open')) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') navLightbox(1);
+      if (e.key === 'ArrowLeft') navLightbox(-1);
+    }
+  });
+
+  // ── FORM ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.querySelector('.form-submit').textContent = 'Message envoyé ✓';
+    e.target.querySelector('.form-submit').style.background = '#4a6741';
+  }
+</script>
+</body>
+</html>
